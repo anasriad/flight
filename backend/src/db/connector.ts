@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import log from "../utils/Logger";
 
 export default async function MongoConnector() {
    dotenv.config();
@@ -10,8 +11,9 @@ export default async function MongoConnector() {
 
    try {
       await mongoose.connect(mongoDBURI!);
+      log.info('Database is Connected')
 
    } catch (error) {
-
+      log.error(error)
    }
 }

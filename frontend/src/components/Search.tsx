@@ -83,9 +83,6 @@ export default function SearchFlights() {
           </motion.div>
         </ButtonGroup>
       </Box>
-
-      {/* Inputs like button group */}
-     {/* Inputs like button group */}
 <Box
   sx={{
     display: "flex",

@@ -76,7 +76,7 @@ export default function Footer() {
                 }}>
                     {Links.map((item, i) => (<ListItemButton key={i} sx={{
                         display: 'flex', gap: 3,
-                        '&:hover':{backgroundColor:'#18455fff', color:'white'}
+                        '&:hover': { backgroundColor: '#18455fff', color: 'white' }
                     }}>{item.icon}{item.Text}</ListItemButton>))}
                 </List>
             </Container>
