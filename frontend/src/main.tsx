@@ -4,6 +4,9 @@ import App from './App.tsx'
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Provider } from 'react-redux';
+import { store } from './States/Store.ts';
+import { Toaster } from 'react-hot-toast'
 const theme = createTheme({
   palette: {
     mode: "light",
@@ -19,10 +22,12 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <App />
-      </GoogleOAuthProvider>
-
+      <Provider store={store}>
+        <Toaster />
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <App />
+        </GoogleOAuthProvider>
+      </Provider>
     </ThemeProvider>
   </StrictMode>,
 )

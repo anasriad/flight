@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
-import { SignInService } from "../services/User.services";
+import { oAuthSignInService, oAuthSignUpService, SignUpService } from "../services/User.services";
 import { generateToken } from "../utils/jwt";
 
-export async function SignInController(req: Request, res: Response) {
+export async function oAuthSignInController(req: Request, res: Response) {
 
     try {
 
-        const User = await SignInService((req as any).googlePayload)
+        const User = await oAuthSignInService((req as any).googlePayload)
+
+        if (!User) res.status(404).send('Not Found')
 
         res.cookie('sessionToken', generateToken(User?.id), {
             httpOnly: true,
@@ -14,11 +16,18 @@ export async function SignInController(req: Request, res: Response) {
         })
 
         res.status(200).json({
+
             id: User?.id,
-            name: User?.name,
+            firstName: User?.firstName,
+            lastName: User?.lastName,
+            picture: User?.picture,
             email: User?.email,
             provider: User?.provider,
+            password: ''
+
         });
+
+
 
     } catch (error) {
 
@@ -26,4 +35,54 @@ export async function SignInController(req: Request, res: Response) {
 
     }
 
+}
+
+export async function oAuthSignUpController(req: Request, res: Response) {
+
+
+
+    try {
+        const User = await oAuthSignUpService((req as any).googlePayload)
+
+        res.cookie('sessionToken', generateToken(User?.id), {
+            httpOnly: true,
+            sameSite: 'strict'
+        })
+
+        res.status(200).json({
+
+            id: User?.id,
+            firstName: User?.firstName,
+            lastName: User?.lastName,
+            picture: User?.picture,
+            email: User?.email,
+            provider: User?.provider,
+            password: ''
+
+        });
+
+    } catch (error) {
+
+
+        console.log(error)
+
+        res.status(500).send(error)
+
+    }
+
+}
+
+export async function SignUpController(req: Request, res: Response) {
+
+    try {
+
+        const User = await SignUpService(req.body)
+
+        res.status(200).send(User)
+
+    } catch (error) {
+
+        res.status(500).send(error)
+
+    }
 }

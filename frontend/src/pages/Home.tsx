@@ -27,6 +27,8 @@ export default function Home() {
 
   const ref = useRef<HTMLInputElement>(null)
 
+  
+
   // Cycle through images every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {

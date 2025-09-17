@@ -1,10 +1,14 @@
 import { OAuth2Client } from "google-auth-library";
 import { Request, Response, NextFunction } from "express";
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 export async function VerifyIdToken(req: Request, res: Response, Next: NextFunction) {
 
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+
     const { token } = req.body
+
 
     try {
         const ticket = await client.verifyIdToken({
@@ -16,7 +20,10 @@ export async function VerifyIdToken(req: Request, res: Response, Next: NextFunct
             return res.status(401).json({ message: "Invalid Google token" });
         }
 
-        (req as any).googlePayload = ticket.getPayload;
+        (req as any).googlePayload = ticket.getPayload();
+
+        console.log((req as any).googlePayload)
+
 
         Next()
 

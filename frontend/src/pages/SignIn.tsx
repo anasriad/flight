@@ -2,21 +2,35 @@ import { Box, Container, Typography, TextField, Button, Paper } from "@mui/mater
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { GoogleLogin } from "@react-oauth/google";
-
+import { useGoogleSignInMutation } from "../API/UserAPI";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Login } from "../States/UserSlice";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import SignUpDialog from "../components/SignUp";
 export default function SignIn() {
-  // Validation schema
+
+  const [GoogleSignInMutation] = useGoogleSignInMutation()
+
+  const Navigate = useNavigate()
+
+  const Dispatch = useDispatch()
+
+  const [signUp, setSignUp] = useState(false)
+
   const validationSchema = yup.object({
     email: yup.string().email("Invalid Email").required("Email is required"),
     password: yup.string().required("Password is required"),
   });
 
-  // Formik setup
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema,
     onSubmit: (values) => {
       console.log("Form submitted:", values);
-      // TODO: send to backend for local login
+
     },
   });
 
@@ -30,6 +44,11 @@ export default function SignIn() {
         bgcolor: "#f5f6fa",
       }}
     >
+      {
+        signUp && <>
+          <SignUpDialog onClose={() => setSignUp(false)} />
+        </>
+      }
       <Container maxWidth="sm">
         <Paper
           elevation={6}
@@ -90,31 +109,54 @@ export default function SignIn() {
               Sign In
             </Button>
 
-            {/* Google Login Button (opens account chooser) */}
             <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                if (credentialResponse.credential) {
-                 console.log(credentialResponse.credential)
+              onSuccess={async ({ credential }) => {
+
+                if (credential) {
+
+                  try {
+
+                    const { data } = await GoogleSignInMutation(credential)
+
+                    if (data) {
+
+                      Dispatch(Login(data))
+
+                      Navigate('/admin')
+
+                      toast.success(`Welcome to your account ${data?.name}`)
+
+                    }
+
+                  } catch (error: any) {
+                    const message =
+                      error?.data?.message || error?.message || "Something went wrong";
+                    toast.error(message);
+                  }
                 }
               }}
+
               onError={() => {
+
                 console.log("Google Login Failed");
+
               }}
-              useOneTap={false} // ensures a dialog opens to pick account
+
+              useOneTap={false}
             />
           </Box>
 
-          {/* Footer */}
+
           <Typography variant="body2" mt={3}>
             Don’t have an account?{" "}
-            <Typography
-              component="span"
-              color="primary"
-              fontWeight="bold"
-              sx={{ cursor: "pointer" }}
+            <Button
+
+              sx={{ cursor: "pointer", fontWeight: "bold" }}
+
+              onClick={() => setSignUp(true)}
             >
               Sign up
-            </Typography>
+            </Button>
           </Typography>
         </Paper>
       </Container>

@@ -3,8 +3,12 @@ import FlightIcon from '@mui/icons-material/Flight';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-
+import { useSelector } from "react-redux";
+import type { RootState } from "../States/Store";
+import { useNavigate } from "react-router-dom";
 export default function Admin() {
+
+    const Navigate = useNavigate()
 
     const options = [
         { icon: <DashboardIcon />, text: "Dashboard" },
@@ -13,10 +17,14 @@ export default function Admin() {
         { icon: <SettingsIcon />, text: "Settings" },
     ];
 
+    const User = useSelector((state: RootState) => state.user)
+
+    if (!User) Navigate('/')
+
     return (
         <Box display="flex" height="100vh">
 
-            {/* Sidebar */}
+           
             <Box
                 sx={{
                     width: 240,
