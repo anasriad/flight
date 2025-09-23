@@ -28,8 +28,6 @@ export default function Home() {
   const ref = useRef<HTMLInputElement>(null)
 
   
-
-  // Cycle through images every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
@@ -55,7 +53,7 @@ export default function Home() {
     <>
       <Header />
       <Box sx={{ position: "relative", width: "100%", minHeight: "100vh", overflow: "hidden" }} ref={ref}>
-        {/* Background Image Slideshow */}
+        
         <AnimatePresence>
           <motion.img
             key={current}
@@ -77,7 +75,7 @@ export default function Home() {
           />
         </AnimatePresence>
 
-        {/* Animated SearchFlights Container */}
+       
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -225,7 +223,7 @@ export default function Home() {
                 src={partner}
                 alt={`Partner ${i}`}
                 style={{
-                  maxWidth: "150px",   // bigger logos
+                  maxWidth: "150px",   
                   maxHeight: "80px",
                   objectFit: "contain",
                 }}

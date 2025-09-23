@@ -3,13 +3,12 @@ import { Users } from "../db/models/Users";
 
 export async function oAuthSignInService(payload: any) {
 
-    const { email, password } = payload
+    const { email } = payload
     try {
 
         return await Users.findOne({
 
             email: email,
-            password: password
 
         })
 

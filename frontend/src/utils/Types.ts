@@ -26,6 +26,7 @@ export interface SearchingType {
     date: string,
 }
 
+
 export interface ScrappedSearch {
     from: string,
     destination: string,
@@ -35,4 +36,7 @@ export interface ScrappedSearch {
     price: number,
     totalSeats: number,
     SeatsAvailable: number,
+    takeOffTime:number,
+    landingTime:number,
+    Link:string,
 }

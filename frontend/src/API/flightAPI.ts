@@ -1,10 +1,10 @@
-import type { SearchingType } from "../utils/Types";
+import type { ScrappedSearch, SearchingType } from "../utils/Types";
 import { apiSlice } from "./apiSlice";
 
-const FlightAPI = apiSlice.injectEndpoints({
+export const FlightAPI = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        searchForFlight: builder.query({
-            query: (searchData: SearchingType) => ({ url: '/flight/search', method: 'GET', body: searchData })
+        searchForFlight: builder.query<ScrappedSearch[], any>({
+            query: (searchData: SearchingType) => ({ url: '/flight/search', method: 'GET', params: searchData })
         })
     })
 })

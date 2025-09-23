@@ -8,29 +8,29 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import SearchIcon from "@mui/icons-material/Search";
 import ConnectingAirportsIcon from '@mui/icons-material/ConnectingAirports';
 import type { SearchingType } from "../utils/Types";
-import { useSearchForFlightQuery } from "../API/flightAPI";
-import toast from "react-hot-toast";
-import { DotLoader } from 'react-spinners'
-import Flights from "../pages/Flights";
+import { useNavigate } from "react-router-dom";
 export default function SearchFlights() {
+  const Navigate = useNavigate()
   const ExternalDestinations = [
-    { text: "Paris, France" },
-    { text: "Monaco, France" },
-    { text: "New York, USA" },
-    { text: "Washington, USA" },
-    { text: "Delhi, India" },
-    { text: "Madrid, Spain" },
-    { text: "London, UK" },
+    { text: "Paris, France", value: 'PAR' },
+    { text: "Monaco, France", value: 'MON' },
+    { text: "Lille, France", value: 'LIL' },
+    { text: "New York, USA", value: 'NEW' },
+    { text: "Washington, USA", value: 'WAS' },
+    { text: "Delhi, India", value: 'DEL' },
+    { text: "Madrid, Spain", value: 'MAD' },
+    { text: "London, UK", value: 'LON' },
+    { text: "Manchester, UK", value: 'MAN' },
   ];
 
   const InternalDestinations = [
-    { text: "Casablanca" },
-    { text: "Fez" },
-    { text: "Agadir" },
-    { text: "Tanger" },
-    { text: "Dakhla" },
-    { text: "Rabat" },
-    { text: "Marrakech" },
+    { text: "Casablanca", value: 'CMN' },
+    { text: "Fez", value: 'FEZ' },
+    { text: "Agadir", value: 'AGA' },
+    { text: "Tanger", value: 'TAN' },
+    { text: "Dakhla", value: 'DAK' },
+    { text: "Rabat", value: 'RBA' },
+    { text: "Marrakech", value: 'MAR' },
   ];
 
   const [destinationType, setDestination] = useState('EX');
@@ -39,7 +39,7 @@ export default function SearchFlights() {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 8, textAlign: "center" }}>
-      {/* Title */}
+
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -50,7 +50,7 @@ export default function SearchFlights() {
         </Typography>
       </motion.div>
 
-      {/* Flight Type Buttons */}
+
       <Box sx={{ mb: 4 }}>
         <ButtonGroup variant="contained" sx={{ borderRadius: "50px", overflow: "hidden" }}>
 
@@ -107,13 +107,14 @@ export default function SearchFlights() {
         >
           <Autocomplete
             freeSolo
-            options={InternalDestinations.map((option) => option.text)}
+            options={InternalDestinations.map((option) => option.value)}
+            onChange={(e, value) => setSearchData(prev => ({ ...prev, from: value || "" }))}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label="From"
                 variant="outlined"
-                onChange={(e) => setSearchData(prev => ({ ...prev, from: e.target.value }))}
+                
                 sx={{
                   borderRadius: "50px 0 0 50px",
                   "& .MuiOutlinedInput-root": { borderRadius: "50px 0 0 50px" },
@@ -136,15 +137,18 @@ export default function SearchFlights() {
             freeSolo
             options={
               destinationType === 'EX'
-                ? ExternalDestinations.map((option) => option.text)
-                : InternalDestinations.map((option) => option.text)
+                ? ExternalDestinations.map((option) => option.value)
+                : InternalDestinations.map((option) => option.value)
             }
+            onChange={(event, value) => {
+              console.log(value);
+              setSearchData(prev => ({ ...prev, destination: value || "" }));
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label="Destination"
                 variant="outlined"
-                onChange={(e) => setSearchData(prev => ({ ...prev, destination: e.target.value }))}
                 sx={{
                   backgroundColor: "white",
                   minWidth: 150,
@@ -177,18 +181,7 @@ export default function SearchFlights() {
           transition={{ delay: 1.8, duration: 0.5, ease: 'easeOut' }}
         >
           <Button
-            onClick={async () => {
-              try {
-                const { data, isLoading } = useSearchForFlightQuery({ ...searchData })
-                if (isLoading) return <DotLoader />
-                else return <Flights {...data} />
-
-              } catch (error: any) {
-                toast.error(error.message || 'Error Loading the page')
-              }
-            }
-
-            }
+            onClick={() => Navigate('/flights', { state: searchData })}
             sx={{
               backgroundColor: '#1976d2',
               borderRadius: "0 50px 50px 0",
