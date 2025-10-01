@@ -21,6 +21,7 @@ export default function SearchFlights() {
     { text: "Madrid, Spain", value: 'MAD' },
     { text: "London, UK", value: 'LON' },
     { text: "Manchester, UK", value: 'MAN' },
+    { text: "Toulouse, France", value: 'TLS' },
   ];
 
   const InternalDestinations = [
@@ -30,7 +31,7 @@ export default function SearchFlights() {
     { text: "Tanger", value: 'TAN' },
     { text: "Dakhla", value: 'DAK' },
     { text: "Rabat", value: 'RBA' },
-    { text: "Marrakech", value: 'MAR' },
+    { text: "Marrakech", value: 'RAK' },
   ];
 
   const [destinationType, setDestination] = useState('EX');

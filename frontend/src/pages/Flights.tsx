@@ -113,7 +113,7 @@ export default function Flights() {
                     {/* Right - Price & Button */}
                     <Box sx={{ minWidth: 200, textAlign: "center", pl: 3 }}>
                       <Typography variant="h4" sx={{ fontWeight: "bold", color: "primary.main", mb: 2 }}>
-                        DH {flight.price}
+                      {flight.price}
                       </Typography>
                       <Button variant="contained" size="large" sx={{ borderRadius: 3, px: 4 }} href={flight.Link} target="blank">
                         SELECT
